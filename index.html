@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DreamGrief - Магазин</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+        body { margin: 0; background-color: #050505; color: #ffffff; font-family: 'Inter', sans-serif; }
+        
+        .dw-header { background: #0f0f0f; border: 1px solid #222; border-radius: 16px; margin: 15px; padding: 15px; display: flex; align-items: center; justify-content: space-between; }
+        .dw-logo-box { display: flex; align-items: center; gap: 15px; }
+        .dw-logo-box img { width: 50px; height: 50px; border-radius: 12px; }
+        .dw-title { font-weight: 800; font-size: 18px; }
+        .dw-subtitle { font-size: 14px; color: #aaa; }
+        .menu-btn { cursor: pointer; font-size: 24px; padding: 10px; }
+        
+        .dropdown { display: none; position: absolute; top: 85px; right: 20px; background: #1a1a1a; padding: 10px; border-radius: 12px; border: 1px solid #333; z-index: 100; min-width: 180px; }
+        .dropdown div { padding: 12px; cursor: pointer; border-bottom: 1px solid #333; }
+        
+        .ip-box { background: #1a1a1a; padding: 15px; border-radius: 15px; text-align: center; margin: 20px auto; width: 90%; max-width: 400px; border: 1px solid #333; cursor: pointer; }
+        .ip-box:hover { border-color: #ff00ff; }
+
+        .banner-img-container { width: 92%; margin: 20px auto; height: 150px; border-radius: 20px; overflow: hidden; border: 1px solid #222; }
+        .banner-img-container img { width: 100%; height: 100%; object-fit: cover; }
+
+        .content { display: grid; grid-template-columns: 200px 1fr; gap: 20px; padding: 20px; max-width: 1000px; margin: 0 auto; }
+        .nav-link { padding: 10px; background: #181818; border-radius: 10px; margin-bottom: 5px; cursor: pointer; }
+        .nav-link.active { border-left: 4px solid #ff00ff; background: #222; }
+        .items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; }
+        
+        .product-card { background: #0f0f0f; border-radius: 20px; padding: 15px; border: 1px solid #1a1a1a; }
+        .prod-img { width: 100%; height: 130px; background: #222; border-radius: 12px; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .prod-img img { width: 100%; height: 100%; object-fit: contain; }
+        
+        .buy-btn { display: block; background: #ff00ff; padding: 8px; border-radius: 8px; text-align: center; margin-top: 10px; text-decoration: none; color: white; cursor: pointer; border: none; }
+        .rules-block { white-space: pre-wrap; text-align: left; background: #111; padding: 20px; border-radius: 15px; color: #ddd; line-height: 1.6; }
+        
+        .wide-card { grid-column: 1 / -1; background: #111; border: 1px solid #333; padding: 10px 20px; border-radius: 15px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; gap: 15px; }
+        .wide-card:hover { border-color: #ff00ff; }
+        .viz-img { width: 80px; height: 50px; background: #222; border-radius: 8px; object-fit: cover; }
+    </style>
+</head>
+<body>
+
+    <header class="dw-header">
+        <div class="dw-logo-box">
+            <img src="Dream.png" onerror="this.src='https://via.placeholder.com/50'">
+            <div>
+                <div class="dw-title">DreamWorld</div>
+                <div class="dw-subtitle">Официальный магазин</div>
+            </div>
+        </div>
+        <div class="menu-btn" onclick="document.getElementById('dd').style.display = document.getElementById('dd').style.display === 'block' ? 'none' : 'block'">☰</div>
+        <div id="dd" class="dropdown">
+            <div onclick="window.open(CONFIG.communityLink, '_blank')">Сообщество</div>
+            <div onclick="window.open(CONFIG.supportLink, '_blank')">Тех. поддержка</div>
+            <div onclick="showRules()">Правила</div>
+        </div>
+    </header>
+
+    <div id="main-ui">
+        <div class="banner-img-container">
+            <img src="logo.png" alt="Официальный магазин" onerror="this.style.display='none'; this.parentElement.style.background='#1a1a1a'; this.parentElement.innerHTML='<div style=\'display:flex; align-items:center; justify-content:center; height:100%; font-size:24px;\'>ОФИЦИАЛЬНЫЙ МАГАЗИН</div>'">
+        </div>
+        
+        <div class="ip-box" onclick="copyIp()">
+            <div style="font-weight:bold;">dreamgrief.mclan.ru</div>
+            <small style="color: #666;">(Нажми, чтобы скопировать)</small>
+        </div>
+
+        <div class="content">
+            <div class="sidebar" id="categories">
+                <div class="nav-link active" onclick="loadCategory('Привилегии', this)">Привилегии</div>
+                <div class="nav-link" onclick="loadCategory('Валюты', this)">Валюты</div>
+                <div class="nav-link" onclick="loadCategory('Кейсы', this)">Кейсы</div>
+                <div class="nav-link" onclick="loadCategory('Услуги', this)">Услуги</div>
+                <div class="nav-link" onclick="loadCategory('Другое', this)">Другое</div>
+            </div>
+            <div class="items-grid" id="grid"></div>
+        </div>
+    </div>
+
+    <div id="rules-ui" style="display:none; padding:20px; max-width: 800px; margin: auto;">
+        <h2>Правила DreamGrief</h2>
+        <div class="rules-block">Правила Регистрации
+
+1.1 | Регистрируясь на нашем Сервере вы автоматически соглашаетесь с правилами Проекта!
+1.2 | Правила могу меняться не оповещая игроков.
+1.3 | Администрация сервера не выдаёт игровые ресурсы/компенсации за их потерю в результате кика сервера, лагов/багов, а также действия игроков, использующие запрещённое ПО (читы) (решает модер - админ вернуть ли-вам ресурсы или нет зависит от модера есть ли у него возможность чем то помочь).
+1.4 | Продажа, передача аккаунта вторым лицам, взломом, могут караться баном (отключение аккаунта - попадание в чсп. )
+1.5 | Решения и действия главной администрации (zexisqw) не обсуждаются и не поддаются разжалованию. Главная администрация вправе выдавать наказания вне рамок данных правил.
+Игровые действия
+2.1 | При покупке донатных ресурсов по типу как (Донат кейсы, Привилегии, любые предметы купленные на сайте) вы обязуетесь сохранить чек (Чтобы в дальнейшем вам могли восстановить донат/ресурс).
+2.2 | Никнейм пользователя должен быть корректным. Некорректным можно назвать любой ник, нарушающий закрепленные правила.
+Наказание
+Бан навсегда
+2.3 | Схожие никнеймы как у Высшей Администрации (zexis).
+Наказание
+Бан навсегда
+2.4 | Запрещены ники, содержащие названия запрещённого ПО, националистические или религиозные символы и экстремистские лозунги (например: “wexside, Flauncher, gitler1488, NewLaucnher1488”).
+Наказание
+Отключение аккаунта
+2.5 | Ответственность за безопасность аккаунта лежит на игроке. Проект не несёт ответственности за утерю доступа к аккаунту. Администрация вправе отказать в восстановлении аккаунта или заблокировать его, если с него был нанесён ущерб проекту.
+
+Общение 
+
+4.1 | Спам-Флуд в чате от 2-ух сообщений (исключение: spec) - Наказание: Мут 30 Минут.
+4.2 | Капс от 2-х слов в одном сообщении - Наказание: Мут 45 Минут.
+4.3 | Оскорбление, Унижение, в сторону игрока - Наказание: Мут 1 Час.
+4.4 | Неадекватное поведение в чате - Наказание: Мут 1 Час.
+4.5 | Неадекватное поведение в сторону Администрации-Модерации, любой вид чата - Наказание: Мут 3 Часа.
+4.6 | Оскорбление Администрации-Модерации, любой вид чата - Наказание: Мут 6-12 Часов.
+4.7 | Оскорбление/Упоминание родителей любой вид чата - Наказание: Мут 10-16 Часов.
+4.8 | Оскорбление/Упоминание родителей Администрации-Модерации - Наказание: Мут 12-24 Часов.
+4.9 | Злоупотребление нецензурной лексики - Наказание: Мут 45 Мин.
+
+Основные правила
+
+5.1 | Использование Читов - Наказание: Бан 50 Дней.
+5.2 | Хранение Читов - Наказание: Бан 50 Дней.
+5.3 | Признание в Читах - Наказание: Бан 40 Дней.
+5.4 | Уклон От Проверки - Наказание: Бан 50 Дней.
+5.5 | Отказ От Проверки - Наказание: Бан 50 Дней.
+5.6 | Оскорбление На Проверке - Наказание: Бан 35 Дней.
+5.7 | Тим с Читером - Наказание: Бан 12 дней.
+5.8 | Взлом или попытка взлома чужих аккаунтов - Наказание: ЧСП навсегда.
+5.9 | Запрещено строительство порнографических построек - Наказание: Бан 4 Дней.
+6.0 | Упоминание, нациста - Наказание: Бан 3 Часа.
+6.1 | Обход бана - Наказание: Бан По Айпи 70 Дней.
+6.2 | Использование багов, Дюп, Абуз, Разрушение экономики - Наказание: Бан до выяснения.
+6.3 | Вредительство серверу, Лаг машины, Заливы построек - Наказание: Бан По Айпи 45 Дней.
+6.4 | Помеха в работе стаффу - Наказание: Бан 6 Часов.
+6.5 | Оскорбление проекта - Наказание: Бан 5 Дней.
+6.6 | Выдача себя за администрацию - Наказание: Бан 12 Часов.
+
+Правила Модерации
+
+7.1 | Модерация обязана Рекать/Скринить нарушения в полный экран.
+7.2 | Ложный вызов на проверку - Понижение, затем снятие.
+7.3 | Некк бан - Варн
+7.4 | Некк мут - Варн
+7.5 | Оскорбление игроков - Варн
+7.6 | Оскорбление проекта - Снятие
+7.7 | Использование своих прав для лутание ивентов, по типу "/vanish" "/gm 3" и тд - Наказание: Понижение, затем снятие.
+7.8 | Некк Тп/Тп к себе - Наказание: Понижение затем снятие.
+
+Список Запрещеных Модов
+
+1. ClickPearl = 5 Дней бана
+2. FreeCam = 12 Дней бана
+3. Xray = 16 Дней бана
+4. AutoTotem = 8 Дней бана
+5. ElytraSwap = 15 Дней бана
+6. AutoSwap = 3 Дней бана
+7. AutoArmor = 8 Дней бана
+8. TriggerBot = 20 Дней бана
+9. Player ESP = 4 Дней бана
+10. HitBoxes = 10 Дней бана
+
+Список разрешеных Visuals
+
+1. Luminar Visual (Старая версия где нет ElytraSwap)
+
+2. HappyVisual
+
+3. ReallyVisual
+
+4. PulseVisual
+
+5. PhantomVisual
+
+6. Plintus Visual
+
+7. SoupVisual
+
+8. EnoghVisual
+
+9. SmertnikVisual
+
+Правила ДКП должны соблюдать каждый игрок с привелегией DADMIN. Если вы не будете соблюдать эти правила, вас отчислят с этого ранга.
+
+1.1 | Оскорбление игроков любой вид чата, по типу "даун" "еблан" "тупой" "чмо" - Наказание: Варн.
+1.2 | Неадекватное поведение в сторону высшего состава, по типу "Как тебя вообще взяли на эту должность" "Мне ниче не будет а тебе будет" - Наказание: Варн.
+1.3 | Оскорбление Сервера любой вид чата по типу, "Сервер говно" "Сервер дерьмовый" "Сервер хуйня" - Наказание: Снятие.
+1.4 | Тп без особой причины - Наказание: Варн.
+1.5 | Вызывать на проверку без явных доказательств - Наказание: Варн.
+1.6 | Злоупотребление гм 3, ваниш для лутание ивентов, аиров - Наказание: Снятие
+1.7 | Оскорбление игроков в /msg /m - Наказание: Варн.
+
+И напоминаю что человека с рангом DADMIN, так же касаются обычные правила, и возможность их обойти не получится.
+
+IP сервера: dreamgrief.mclan.ru
+🌐 Сайт сервера: hm514990.webhm.cloud
+🎧 ДСК сервера: https://discord.gg/GC9CEhgS3
+⚡️ ТГК сервера: https://t.me/DreamGrieef
+
+
+Удачной игры на нашем сервере 
+Айпи: dreamgrief.mclan.ru🪼</div>
+        <button class="buy-btn" style="width:200px; margin: 20px auto;" onclick="location.reload()">Назад</button>
+    </div>
+
+    <script>
+        const CONFIG = {
+            payLink: "https://t.me/purpurfixer",
+            communityLink: "https://t.me/DreamGrieef",
+            supportLink: "https://t.me/purpurfixer"
+        };
+
+        function copyIp() {
+            navigator.clipboard.writeText("dreamgrief.mclan.ru").then(() => alert("IP скопирован!"));
+        }
+
+        const data = {
+            'Привилегии': [
+                { name: 'BUNNY', price: '222₽', link: CONFIG.payLink, img: 'bunny.png' },
+                { name: 'HUDRA', price: '299₽', link: CONFIG.payLink, img: 'hudra.png' },
+                { name: 'VAMPIRE', price: '389₽', link: CONFIG.payLink, img: 'dracula.png' },
+                { name: 'COBRA', price: '454₽', link: CONFIG.payLink, img: 'cobra.png' },
+                { name: 'RABBIT', price: '555₽', link: CONFIG.payLink, img: 'rabbit.png' },
+                { name: 'GOD', price: '689₽', link: CONFIG.payLink, img: 'god.png' },
+                { name: 'PEGAS', price: '777₽', link: CONFIG.payLink, img: 'pegas.png' },
+                { name: 'DREAM', price: '888₽', link: CONFIG.payLink, img: 'dhelper.png' },
+                { name: 'SPONSOR', price: '1444₽', link: CONFIG.payLink, img: 'glmoder30.png' },
+                { name: 'D.ADMIN', price: '3999₽', link: CONFIG.payLink, img: 'glmoder.png' }
+            ],
+            'Валюты': [{ name: '10 Рилликов', price: '1₽', link: CONFIG.payLink, img: 'rilliki.png' }],
+            'Кейсы': [
+                { name: 'Летний кейс', price: '350₽', link: CONFIG.payLink, img: 'summer.png' },
+                { name: 'Кейс с донатом', price: '222₽', link: CONFIG.payLink, img: 'case_donat.png' },
+                { name: 'Кейс с валютой', price: '89₽', link: CONFIG.payLink, img: 'case_valuta.png' },
+                { name: 'Кейс с рилликами', price: '111₽', link: CONFIG.payLink, img: 'case_rilliki.png' },
+                { name: 'Кейс домера', price: 'НЕТ В НАЛИЧИИ', link: '#', img: 'case_domer.png' }
+            ],
+            'Услуги': [{ name: 'Разбан', price: '333₽', link: CONFIG.payLink, img: 'unban.png' }],
+            'Другое': [
+                { type: 'header', name: 'ВИЗУАЛЫ' },
+                { name: 'PhantomVizuals', link: 'https://share.google/I40JmVwxPptyQwdmB', img: 'Viz1.png' },
+                { name: 'PulseVizuals', link: ' https://share.google/HIGtzxGcnE4J5sRxM', img: 'Viz2.png' },
+                { name: 'ReallyVizuals', link: 'https://share.google/udKz3HhyIaq0lnQOs', img: 'Viz3.png' },
+                { name: 'SoupVizuals', link: 'https://share.google/bBJpiZCQyX8ppOhVE', img: 'Viz4.png' },
+                { name: 'PlintusVizuals', link: 'https://share.google/iULEdCdMMPIRNSUEi', img: 'Viz5.png' },
+                { name: 'SmertnikVizuals', link: 'https://share.google/mg1pGxGW81rCfDFWq', img: 'Viz6.png' },
+                { name: 'HappyVizuals', link: 'HappyVizuals.ru', img: 'Viz7.png' },
+                { type: 'header', name: 'МАГАЗИН ИГРОКОВ' },
+                { name: 'Открыть магазин', link: '#', img: 'Viz8.png' }
+            ]
+        };
+
+        function showRules() {
+            document.getElementById('main-ui').style.display = 'none';
+            document.getElementById('rules-ui').style.display = 'block';
+            document.getElementById('dd').style.display = 'none';
+        }
+
+        function loadCategory(cat, el) {
+            document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
+            if(el) el.classList.add('active');
+            document.getElementById('grid').innerHTML = data[cat].map(item => {
+                if(item.type === 'header') return `<h3 style="grid-column: 1 / -1; margin-top:20px;">${item.name}</h3>`;
+                if(cat === 'Другое') return `
+                    <div class="wide-card" onclick="window.open('${item.link}', '_blank')">
+                        <img src="${item.img}" class="viz-img" onerror="this.src='https://via.placeholder.com/80x50'">
+                        <div style="flex-grow:1; font-weight:bold;">${item.name}</div>
+                        <div>➡️</div>
+                    </div>`;
+                return `
+                <div class="product-card">
+                    <div class="prod-img"><img src="${item.img}" onerror="this.src='https://via.placeholder.com/150'"></div>
+                    <div style="font-weight:bold;">${item.name}</div>
+                    <div style="color:#ff00ff; margin:10px 0;">${item.price}</div>
+                    ${item.price === 'НЕТ В НАЛИЧИИ' ? '<div class="buy-btn" style="background:#555">Нет в наличии</div>' : '<a href="'+item.link+'" target="_blank" class="buy-btn">Купить</a>'}
+                </div>
+            `}).join('');
+        }
+        loadCategory('Привилегии', document.querySelector('.nav-link'));
+    </script>
+</body>
+</html>
