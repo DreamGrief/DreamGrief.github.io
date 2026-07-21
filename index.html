@@ -5,49 +5,86 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DreamGrief - Магазин</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
-        body { margin: 0; background-color: #050505; color: #ffffff; font-family: 'Inter', sans-serif; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+        body { margin: 0; background-color: #0b0b0d; color: #ffffff; font-family: 'Inter', sans-serif; }
         
-        .dw-header { background: #0f0f0f; border: 1px solid #222; border-radius: 16px; margin: 15px; padding: 15px; display: flex; align-items: center; justify-content: space-between; }
+        /* Верхний баннер скидок */
+        .discount-banner { background: #141416; border: 1px solid #222; border-radius: 16px; margin: 15px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+        .discount-text { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #f3f3f3; }
+        .close-banner { background: none; border: none; color: #aaa; font-size: 18px; cursor: pointer; padding: 0 5px; }
+        .close-banner:hover { color: #fff; }
+
+        .dw-header { background: #141416; border: 1px solid #222; border-radius: 20px; margin: 15px; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
         .dw-logo-box { display: flex; align-items: center; gap: 15px; }
-        .dw-logo-box img { width: 50px; height: 50px; border-radius: 12px; }
+        .dw-logo-box img { width: 50px; height: 50px; border-radius: 14px; object-fit: cover; }
         .dw-title { font-weight: 800; font-size: 18px; }
-        .dw-subtitle { font-size: 14px; color: #aaa; }
-        .menu-btn { cursor: pointer; font-size: 24px; padding: 10px; }
+        .dw-subtitle { font-size: 13px; color: #888; }
+        .menu-btn { cursor: pointer; font-size: 22px; padding: 8px 12px; background: #1e1e22; border-radius: 12px; border: 1px solid #2a2a30; }
         
-        .dropdown { display: none; position: absolute; top: 85px; right: 20px; background: #1a1a1a; padding: 10px; border-radius: 12px; border: 1px solid #333; z-index: 100; min-width: 180px; }
-        .dropdown div { padding: 12px; cursor: pointer; border-bottom: 1px solid #333; }
+        .dropdown { display: none; position: absolute; top: 140px; right: 20px; background: #161619; padding: 8px; border-radius: 16px; border: 1px solid #2a2a30; z-index: 100; min-width: 180px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        .dropdown div { padding: 12px 16px; cursor: pointer; border-radius: 10px; font-size: 14px; font-weight: 500; transition: background 0.2s; }
+        .dropdown div:hover { background: #222228; }
         
-        .ip-box { background: #1a1a1a; padding: 15px; border-radius: 15px; text-align: center; margin: 20px auto; width: 90%; max-width: 400px; border: 1px solid #333; cursor: pointer; }
-        .ip-box:hover { border-color: #ff00ff; }
+        .ip-box { background: #141416; padding: 16px; border-radius: 20px; text-align: center; margin: 15px auto; width: 92%; max-width: 480px; border: 1px solid #222; cursor: pointer; transition: border-color 0.2s; }
+        .ip-box:hover { border-color: #3b82f6; }
 
-        .banner-img-container { width: 92%; margin: 20px auto; height: 150px; border-radius: 20px; overflow: hidden; border: 1px solid #222; }
-        .banner-img-container img { width: 100%; height: 100%; object-fit: cover; }
+        /* Секции выбора (Режимы и Категории) */
+        .section-container { width: 92%; max-width: 480px; margin: 15px auto; }
+        .section-title { font-size: 15px; font-weight: 700; color: #aaa; margin-bottom: 10px; }
+        
+        .selector-box { background: #141416; border: 1px solid #222; border-radius: 20px; padding: 8px; margin-bottom: 10px; }
+        .selector-item { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-radius: 14px; cursor: pointer; font-weight: 600; font-size: 15px; transition: background 0.2s; margin-bottom: 4px; }
+        .selector-item:last-child { margin-bottom: 0; }
+        .selector-item:hover { background: #1c1c21; }
+        .selector-item.active { background: #1c1c21; border: 1px solid #2a2a30; }
+        .radio-dot { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #444; display: flex; align-items: center; justify-content: center; }
+        .selector-item.active .radio-dot { border-color: #fff; background: #fff; color: #000; font-size: 12px; }
 
-        .content { display: grid; grid-template-columns: 200px 1fr; gap: 20px; padding: 20px; max-width: 1000px; margin: 0 auto; }
-        .nav-link { padding: 10px; background: #181818; border-radius: 10px; margin-bottom: 5px; cursor: pointer; }
-        .nav-link.active { border-left: 4px solid #ff00ff; background: #222; }
-        .items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; }
+        .content { max-width: 480px; margin: 0 auto; padding: 0 15px 30px 15px; }
+        .items-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
         
-        .product-card { background: #0f0f0f; border-radius: 20px; padding: 15px; border: 1px solid #1a1a1a; }
-        .prod-img { width: 100%; height: 130px; background: #222; border-radius: 12px; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .prod-img img { width: 100%; height: 100%; object-fit: contain; }
+        /* Карточка товара */
+        .product-card { background: #141416; border-radius: 24px; padding: 16px; border: 1px solid #222; box-shadow: 0 8px 30px rgba(0,0,0,0.4); }
+        .prod-img-wrap { width: 100%; height: 200px; background: #1a1a1f; border-radius: 18px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; border: 1px solid #2a2a30; }
+        .prod-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
         
-        .buy-btn { display: block; background: #ff00ff; padding: 8px; border-radius: 8px; text-align: center; margin-top: 10px; text-decoration: none; color: white; cursor: pointer; border: none; }
-        .rules-block { white-space: pre-wrap; text-align: left; background: #111; padding: 20px; border-radius: 15px; color: #ddd; line-height: 1.6; }
+        /* Бейджи на картинке */
+        .badge-discount { position: absolute; top: 12px; left: 12px; background: #0c0c0e; color: #fff; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; border: 1px solid #222; }
+        .badge-summer { position: absolute; top: 12px; right: 12px; background: #ffffff; color: #000000; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+
+        .prod-title { font-weight: 800; font-size: 18px; margin-bottom: 15px; color: #fff; line-height: 1.3; }
         
-        .wide-card { grid-column: 1 / -1; background: #111; border: 1px solid #333; padding: 10px 20px; border-radius: 15px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; gap: 15px; }
-        .wide-card:hover { border-color: #ff00ff; }
-        .viz-img { width: 80px; height: 50px; background: #222; border-radius: 8px; object-fit: cover; }
+        .prod-footer { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+        .price-box { display: flex; flex-direction: column; }
+        .old-price { font-size: 13px; color: #666; text-decoration: line-through; font-weight: 600; }
+        .new-price { font-size: 20px; font-weight: 800; color: #fff; }
+
+        .buy-btn { display: flex; align-items: center; justify-content: center; background: #2596ff; padding: 12px 28px; border-radius: 14px; text-decoration: none; color: white; font-weight: 700; font-size: 15px; cursor: pointer; border: none; transition: background 0.2s, transform 0.1s; box-shadow: 0 4px 15px rgba(37, 150, 255, 0.3); }
+        .buy-btn:hover { background: #1a82e2; }
+        .buy-btn:active { transform: scale(0.98); }
+
+        .rules-block { white-space: pre-wrap; text-align: left; background: #141416; padding: 20px; border-radius: 20px; color: #ddd; line-height: 1.6; border: 1px solid #222; }
+        
+        .wide-card { grid-column: 1 / -1; background: #141416; border: 1px solid #222; padding: 14px 18px; border-radius: 18px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; gap: 15px; transition: border-color 0.2s; }
+        .wide-card:hover { border-color: #2596ff; }
+        .viz-img { width: 70px; height: 45px; background: #1a1a1f; border-radius: 10px; object-fit: cover; }
     </style>
 </head>
 <body>
+
+    <!-- Верхний плавающий баннер -->
+    <div class="discount-banner" id="top-banner">
+        <div class="discount-text">
+            <span>🔥</span> Летние скидки скоро закончатся, приобретай - пока не поздно!
+        </div>
+        <button class="close-banner" onclick="document.getElementById('top-banner').style.display='none'">✕</button>
+    </div>
 
     <header class="dw-header">
         <div class="dw-logo-box">
             <img src="Dream.png" onerror="this.src='https://via.placeholder.com/50'">
             <div>
-                <div class="dw-title">DreamWorld</div>
+                <div class="dw-title">DreamGrief</div>
                 <div class="dw-subtitle">Официальный магазин</div>
             </div>
         </div>
@@ -60,28 +97,67 @@
     </header>
 
     <div id="main-ui">
-        <div class="banner-img-container">
-            <img src="logo.png" alt="Официальный магазин" onerror="this.style.display='none'; this.parentElement.style.background='#1a1a1a'; this.parentElement.innerHTML='<div style=\'display:flex; align-items:center; justify-content:center; height:100%; font-size:24px;\'>ОФИЦИАЛЬНЫЙ МАГАЗИН</div>'">
-        </div>
-        
         <div class="ip-box" onclick="copyIp()">
-            <div style="font-weight:bold;">dreamgrief.mclan.ru</div>
-            <small style="color: #666;">(Нажми, чтобы скопировать)</small>
+            <div style="font-weight:700; font-size:15px;">dreamgrief.mclan.ru</div>
+            <small style="color: #666; font-size: 12px;">(Нажми, чтобы скопировать IP)</small>
+        </div>
+
+        <!-- Выбор режима -->
+        <div class="section-container">
+            <div class="section-title">Выберите режим</div>
+            <div class="selector-box">
+                <div class="selector-item active" onclick="selectServerMode(this)">
+                    <span>ГРИФ №1</span>
+                    <div class="radio-dot">✓</div>
+                </div>
+                <div class="selector-item" onclick="selectServerMode(this)">
+                    <span>ГРИФ №2</span>
+                    <div class="radio-dot"></div>
+                </div>
+                <div class="selector-item" onclick="selectServerMode(this)">
+                    <span>ГРИФ №3</span>
+                    <div class="radio-dot"></div>
+                </div>
+                <div class="selector-item" onclick="selectServerMode(this)">
+                    <span>ГРИФ HVH</span>
+                    <div class="radio-dot"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Выбор категории -->
+        <div class="section-container">
+            <div class="section-title">Выберите категорию</div>
+            <div class="selector-box" id="categories">
+                <div class="selector-item active" onclick="loadCategory('Привилегии', this)">
+                    <span>Привилегии</span>
+                    <div class="radio-dot">✓</div>
+                </div>
+                <div class="selector-item" onclick="loadCategory('Валюты', this)">
+                    <span>Валюты</span>
+                    <div class="radio-dot"></div>
+                </div>
+                <div class="selector-item" onclick="loadCategory('Кейсы', this)">
+                    <span>Кейсы</span>
+                    <div class="radio-dot"></div>
+                </div>
+                <div class="selector-item" onclick="loadCategory('Услуги', this)">
+                    <span>Услуги</span>
+                    <div class="radio-dot"></div>
+                </div>
+                <div class="selector-item" onclick="loadCategory('Другое', this)">
+                    <span>Другое</span>
+                    <div class="radio-dot"></div>
+                </div>
+            </div>
         </div>
 
         <div class="content">
-            <div class="sidebar" id="categories">
-                <div class="nav-link active" onclick="loadCategory('Привилегии', this)">Привилегии</div>
-                <div class="nav-link" onclick="loadCategory('Валюты', this)">Валюты</div>
-                <div class="nav-link" onclick="loadCategory('Кейсы', this)">Кейсы</div>
-                <div class="nav-link" onclick="loadCategory('Услуги', this)">Услуги</div>
-                <div class="nav-link" onclick="loadCategory('Другое', this)">Другое</div>
-            </div>
             <div class="items-grid" id="grid"></div>
         </div>
     </div>
 
-    <div id="rules-ui" style="display:none; padding:20px; max-width: 800px; margin: auto;">
+    <div id="rules-ui" style="display:none; padding:15px; max-width: 600px; margin: auto;">
         <h2>Правила DreamGrief</h2>
         <div class="rules-block">Правила Регистрации
 
@@ -89,7 +165,7 @@
 1.2 | Правила могу меняться не оповещая игроков.
 1.3 | Администрация сервера не выдаёт игровые ресурсы/компенсации за их потерю в результате кика сервера, лагов/багов, а также действия игроков, использующие запрещённое ПО (читы) (решает модер - админ вернуть ли-вам ресурсы или нет зависит от модера есть ли у него возможность чем то помочь).
 1.4 | Продажа, передача аккаунта вторым лицам, взломом, могут караться баном (отключение аккаунта - попадание в чсп. )
-1.5 | Решения и действия главной администрации (zexisqw) не обсуждаются и не поддаются разжалованию. Главная администрация вправе выдавать наказания вне рамок данных правил.
+1.5 | Решения и действия главной администрации (zexisqw) не обсуждаются и не подлежат разжалованию. Главная администрация вправе выдавать наказания вне рамок данных правил.
 Игровые действия
 2.1 | При покупке донатных ресурсов по типу как (Донат кейсы, Привилегии, любые предметы купленные на сайте) вы обязуетесь сохранить чек (Чтобы в дальнейшем вам могли восстановить донат/ресурс).
 2.2 | Никнейм пользователя должен быть корректным. Некорректным можно назвать любой ник, нарушающий закрепленные правила.
@@ -145,7 +221,7 @@
 7.7 | Использование своих прав для лутание ивентов, по типу "/vanish" "/gm 3" и тд - Наказание: Понижение, затем снятие.
 7.8 | Некк Тп/Тп к себе - Наказание: Понижение затем снятие.
 
-Список Запрещеных Модов
+Список Запрешеных Модов
 
 1. ClickPearl = 5 Дней бана
 2. FreeCam = 12 Дней бана
@@ -161,21 +237,13 @@
 Список разрешеных Visuals
 
 1. Luminar Visual (Старая версия где нет ElytraSwap)
-
 2. HappyVisual
-
 3. ReallyVisual
-
 4. PulseVisual
-
 5. PhantomVisual
-
 6. Plintus Visual
-
 7. SoupVisual
-
 8. EnoghVisual
-
 9. SmertnikVisual
 
 Правила ДКП должны соблюдать каждый игрок с привелегией DADMIN. Если вы не будете соблюдать эти правила, вас отчислят с этого ранга.
@@ -198,7 +266,7 @@ IP сервера: dreamgrief.mclan.ru
 
 Удачной игры на нашем сервере 
 Айпи: dreamgrief.mclan.ru🪼</div>
-        <button class="buy-btn" style="width:200px; margin: 20px auto;" onclick="location.reload()">Назад</button>
+        <button class="buy-btn" style="width:100%; margin: 20px auto; max-width:200px;" onclick="location.reload()">Назад</button>
     </div>
 
     <script>
@@ -212,28 +280,36 @@ IP сервера: dreamgrief.mclan.ru
             navigator.clipboard.writeText("dreamgrief.mclan.ru").then(() => alert("IP скопирован!"));
         }
 
+        function selectServerMode(el) {
+            document.querySelectorAll('.section-container:first-of-type .selector-item').forEach(i => {
+                i.classList.remove('active');
+                i.querySelector('.radio-dot').innerHTML = '';
+            });
+            el.classList.add('active');
+            el.querySelector('.radio-dot').innerHTML = '✓';
+        }
+
         const data = {
             'Привилегии': [
-                { name: 'BUNNY', price: '222₽', link: CONFIG.payLink, img: 'bunny.png' },
-                { name: 'HUDRA', price: '299₽', link: CONFIG.payLink, img: 'hudra.png' },
-                { name: 'VAMPIRE', price: '389₽', link: CONFIG.payLink, img: 'dracula.png' },
-                { name: 'COBRA', price: '454₽', link: CONFIG.payLink, img: 'cobra.png' },
-                { name: 'RABBIT', price: '555₽', link: CONFIG.payLink, img: 'rabbit.png' },
-                { name: 'GOD', price: '689₽', link: CONFIG.payLink, img: 'god.png' },
-                { name: 'PEGAS', price: '777₽', link: CONFIG.payLink, img: 'pegas.png' },
-                { name: 'DREAM', price: '888₽', link: CONFIG.payLink, img: 'dhelper.png' },
-                { name: 'SPONSOR', price: '1444₽', link: CONFIG.payLink, img: 'glmoder30.png' },
-                { name: 'D.ADMIN', price: '3000₽', link: CONFIG.payLink, img: 'glmoder.png' }
+                { name: 'HUDRA', price: '100₽', oldPrice: '222', link: CONFIG.payLink, img: 'hudra.png' },
+                { name: 'COBRA', price: '250₽', oldPrice: '350₽', link: CONFIG.payLink, img: 'cobra.png' },
+                { name: 'RABBIT', price: '350₽', oldPrice: '459₽', link: CONFIG.payLink, img: 'rabbit.png' },
+                { name: 'D.HELPER', price: '499₽', oldPrice: '600₽', link: CONFIG.payLink, img: 'hui.png' },
+                { name: 'GOD', price: '599₽', oldPrice: '777₽', link: CONFIG.payLink, img: 'god.png' },
+                { name: 'PEGAS', price: '777₽', oldPrice: '999₽', link: CONFIG.payLink, img: 'pegas.png' },
+                { name: 'DREAM', price: '888₽', oldPrice: '1444₽', link: CONFIG.payLink, img: 'dhelper.png' },
+                { name: 'SPONSOR', price: '1111₽', oldPrice: '2000₽', link: CONFIG.payLink, img: 'glmoder30.png' },
+                { name: 'D.ADMIN', price: '2555₽', oldPrice: '3999₽', link: CONFIG.payLink, img: 'glmoder.png' }
             ],
-            'Валюты': [{ name: '10 Рилликов', price: '1₽', link: CONFIG.payLink, img: 'rilliki.png' }],
+            'Валюты': [{ name: '10 Рилликов', price: '1₽', oldPrice: '2₽', link: CONFIG.payLink, img: 'rilliki.png' }],
             'Кейсы': [
-                { name: 'Летний кейс', price: '350₽', link: CONFIG.payLink, img: 'summer.png' },
-                { name: 'Кейс с донатом', price: '222₽', link: CONFIG.payLink, img: 'case_donat.png' },
-                { name: 'Кейс с валютой', price: '89₽', link: CONFIG.payLink, img: 'case_valuta.png' },
-                { name: 'Кейс с рилликами', price: '111₽', link: CONFIG.payLink, img: 'case_rilliki.png' },
-                { name: 'Кейс домера', price: 'НЕТ В НАЛИЧИИ', link: '#', img: 'case_domer.png' }
+                { name: 'Летний кейс', price: '150₽', oldPrice: '350₽', link: CONFIG.payLink, img: 'summer.png' },
+                { name: 'Кейс с донатом', price: '222₽', oldPrice: '333₽', link: CONFIG.payLink, img: 'case_donat.png' },
+                { name: 'Кейс с валютой', price: '89₽', oldPrice: '178₽', link: CONFIG.payLink, img: 'case_valuta.png' },
+                { name: 'Кейс с рилликами', price: '78₽', oldPrice: '150₽', link: CONFIG.payLink, img: 'case_rilliki.png' },
+                { name: 'Кейс домера', price: 'НЕТ В НАЛИЧИИ', oldPrice: '', link: '#', img: 'case_domer.png' }
             ],
-            'Услуги': [{ name: 'Разбан', price: '333₽', link: CONFIG.payLink, img: 'unban.png' }],
+            'Услуги': [{ name: 'Разбан', price: '200₽', oldPrice: '350₽', link: CONFIG.payLink, img: 'unban.png' }],
             'Другое': [
                 { type: 'header', name: 'ВИЗУАЛЫ' },
                 { name: 'PhantomVizuals', link: 'https://share.google/I40JmVwxPptyQwdmB', img: 'Viz1.png' },
@@ -255,26 +331,42 @@ IP сервера: dreamgrief.mclan.ru
         }
 
         function loadCategory(cat, el) {
-            document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
-            if(el) el.classList.add('active');
+            document.querySelectorAll('#categories .selector-item').forEach(i => {
+                i.classList.remove('active');
+                i.querySelector('.radio-dot').innerHTML = '';
+            });
+            if(el) {
+                el.classList.add('active');
+                el.querySelector('.radio-dot').innerHTML = '✓';
+            }
+            
             document.getElementById('grid').innerHTML = data[cat].map(item => {
-                if(item.type === 'header') return `<h3 style="grid-column: 1 / -1; margin-top:20px;">${item.name}</h3>`;
+                if(item.type === 'header') return `<h3 style="grid-column: 1 / -1; margin-top:15px; color:#aaa; font-size:15px;">${item.name}</h3>`;
                 if(cat === 'Другое') return `
                     <div class="wide-card" onclick="window.open('${item.link}', '_blank')">
-                        <img src="${item.img}" class="viz-img" onerror="this.src='https://via.placeholder.com/80x50'">
-                        <div style="flex-grow:1; font-weight:bold;">${item.name}</div>
-                        <div>➡️</div>
+                        <img src="${item.img}" class="viz-img" onerror="this.src='https://via.placeholder.com/70x45'">
+                        <div style="flex-grow:1; font-weight:700; font-size:15px;">${item.name}</div>
+                        <div style="color:#aaa;">➡️</div>
                     </div>`;
                 return `
                 <div class="product-card">
-                    <div class="prod-img"><img src="${item.img}" onerror="this.src='https://via.placeholder.com/150'"></div>
-                    <div style="font-weight:bold;">${item.name}</div>
-                    <div style="color:#ff00ff; margin:10px 0;">${item.price}</div>
-                    ${item.price === 'НЕТ В НАЛИЧИИ' ? '<div class="buy-btn" style="background:#555">Нет в наличии</div>' : '<a href="'+item.link+'" target="_blank" class="buy-btn">Купить</a>'}
+                    <div class="prod-img-wrap">
+                        <div class="badge-discount">-50%</div>
+                        <div class="badge-summer">🔥 ЛЕТНИЕ СКИДКИ</div>
+                        <img src="${item.img}" onerror="this.src='https://via.placeholder.com/150'">
+                    </div>
+                    <div class="prod-title">${item.name}</div>
+                    <div class="prod-footer">
+                        <div class="price-box">
+                            ${item.price === 'НЕТ В НАЛИЧИИ' ? '' : `<span class="old-price">${item.oldPrice}</span>`}
+                            <span class="new-price" style="${item.price === 'НЕТ В НАЛИЧИИ' ? 'color:#888; font-size:15px;' : ''}">${item.price}</span>
+                        </div>
+                        ${item.price === 'НЕТ В НАЛИЧИИ' ? '<div class="buy-btn" style="background:#222; color:#777; cursor:default; box-shadow:none;">Нет в наличии</div>' : '<a href="'+item.link+'" target="_blank" class="buy-btn">Купить</a>'}
+                    </div>
                 </div>
             `}).join('');
         }
-        loadCategory('Привилегии', document.querySelector('.nav-link'));
+        loadCategory('Привилегии', document.querySelector('#categories .selector-item'));
     </script>
 </body>
 </html>
